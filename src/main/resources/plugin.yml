@@ -1,4 +1,4 @@
-name: RealTimeWeather
+name: ${project.name}
 version: ${project.version}
 main: me.k4m1s.realtimeweather.RealTimeWeather
 api-version: 1.16
