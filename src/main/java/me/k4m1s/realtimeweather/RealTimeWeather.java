@@ -48,7 +48,7 @@ public final class RealTimeWeather extends JavaPlugin {
         hsConfig.put("countryCode", config.getString("countryCode", "pl"));
 
         // Check all config variables.
-        if (WeatherManager.isConfigValid(hsConfig)) {
+        if (!WeatherManager.isConfigValid(hsConfig)) {
             this.getServer().getPluginManager().disablePlugin(this);
             return;
         }
