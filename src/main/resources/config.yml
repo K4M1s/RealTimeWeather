@@ -1,14 +1,14 @@
 # Enter here your API KEY from https://home.openweathermap.org/api_keys
-APIKey: ENTERYOURAPIKEYHERE
+APIKey: ENTER_YOUR_API_KEY_HERE
 
 # Enter here city for each you want weather to be.
-cityName: warsaw
+cityName: Warsaw
 
-# Enter the ISO 3166-1 country code. For Poland it is 'pl'
+# Enter the ISO 3166-1 country code. For example Poland has 'pl' ISO code.
 countryCode: pl
 
 # If you want the weather to be the same as real in provided City type 'true' here.
-realtimeweather: true
+realTimeWeather: true
 
 # If you want the time to be the same as real in provided City type 'true' here.
-realtime: true
+realTime: true

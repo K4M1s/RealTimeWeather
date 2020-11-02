@@ -6,73 +6,103 @@ import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.HashMap;
+
+/**
+ * Main class for RealTimeWeather plugin.
+ */
 public final class RealTimeWeather extends JavaPlugin {
 
+    /**
+     * RealTimeWeather plugin instance.
+     */
     private static RealTimeWeather instance;
+
+    /**
+     * Weather API instance.
+     */
     private static WeatherAPI weatherAPI;
 
-    FileConfiguration config = getConfig();
+    /**
+     * File configuration - main config.
+     */
+    private static FileConfiguration config;
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void onEnable() {
+        // Save default config.
         this.saveDefaultConfig();
+
+        // Initialize instances.
         instance = this;
         weatherAPI = new WeatherAPI();
+        config = getConfig();
 
-        String APIKey = config.getString("APIKey");
-        String cityName = config.getString("cityName");
-        String countryCode = config.getString("countryCode");
+        // Prepare config variables.
+        HashMap<String, String> hsConfig = new HashMap<>();
+        hsConfig.put("apiKey", config.getString("APIKey", "ENTER_YOUR_API_KEY_HERE"));
+        hsConfig.put("cityName", config.getString("cityName", "Warsaw"));
+        hsConfig.put("countryCode", config.getString("countryCode", "pl"));
 
-        if (APIKey == null || APIKey.isEmpty() || APIKey.equalsIgnoreCase("ENTERYOURAPIKEYHERE")) {
-            System.out.println("[RTW] Warning: Disabling plugin because of default or empty API KEY");
+        // Check all config variables.
+        if (WeatherManager.isConfigValid(hsConfig)) {
             this.getServer().getPluginManager().disablePlugin(this);
             return;
         }
 
-        if (cityName == null || cityName.isEmpty()) {
-            System.out.println("[RTW] Warning: Disabling plugin because of empty city name");
-            this.getServer().getPluginManager().disablePlugin(this);
-            return;
-        }
+        // Pass data to weather api.
+        weatherAPI.setAPIKey(config.getString("APIKey"));
+        weatherAPI.setCityCode(config.getString("cityName"), config.getString("countryCode"));
 
-        if (countryCode == null || countryCode.isEmpty()) {
-            System.out.println("[RTW] Warning: Disabling plugin because of empty country code");
-            this.getServer().getPluginManager().disablePlugin(this);
-            return;
-        }
-
-        try {
-            weatherAPI.setAPIKey(config.getString("APIKey"));
-            weatherAPI.setCityCode(config.getString("cityName") + "," + config.getString("countryCode"));
-            System.out.println(weatherAPI.getWeatherData());
-        } catch(Exception e) {
-            getServer().getPluginManager().disablePlugin(this);
-            System.out.println("[RTW] City name or country code is invalid.");
-        }
+        // Start weather download data timer.
         WeatherManager.startTimer();
 
-        // Disable Day light and Weather Cycle
-        for(World world: Bukkit.getWorlds()) {
-            if (config.getBoolean("realtime")) {
-                world.setGameRule(GameRule.DO_DAYLIGHT_CYCLE, false);
-            }
-            if (config.getBoolean("realtimeweather")) {
-                world.setGameRule(GameRule.DO_WEATHER_CYCLE, false);
-            }
-
+        // Disable Day light and Weather Cycle based on config settings.
+        for (World world: Bukkit.getWorlds()) {
+            world.setGameRule(GameRule.DO_DAYLIGHT_CYCLE, !config.getBoolean("realTime", true));
+            world.setGameRule(GameRule.DO_WEATHER_CYCLE, !config.getBoolean("realTimeWeather", true));
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void onDisable() {
         WeatherManager.stopTimer();
     }
 
+    /**
+     * Get Main plugin instance for other tasks.
+     *
+     * @return RealTimeWeather
+     *   Main plugin instance.
+     */
     public static RealTimeWeather getInstance() {
         return instance;
     }
 
+    /**
+     * Get Weather API instance for extra functionality.
+     *
+     * @return WeatherAPI
+     *   Weather API instance.
+     */
     public static WeatherAPI getWeatherAPI() {
         return weatherAPI;
     }
+
+    /**
+     * Get plugin config instance.
+     *
+     * @return FileConfiguration
+     *   Config file configuration.
+     */
+    public static FileConfiguration getPluginConfig() {
+        return config;
+    }
+
 }
