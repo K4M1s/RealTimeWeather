@@ -2,10 +2,13 @@
 APIKey: ENTER_YOUR_API_KEY_HERE
 
 # Enter here city for each you want weather to be.
-cityName: Warsaw
+cityName: "Warsaw"
 
 # Enter the ISO 3166-1 country code. For example Poland has 'pl' ISO code.
-countryCode: pl
+countryCode: "pl"
+
+# Optional, if you are living in US, otherwise set to ''
+stateCode: ""
 
 # If you want the weather to be the same as real in provided City type 'true' here.
 realTimeWeather: true
