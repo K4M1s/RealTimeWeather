@@ -24,6 +24,11 @@ public class WeatherAPI {
     String country;
 
     /**
+     * US State alpha code
+     */
+    String stateCode;
+
+    /**
      * API Key from config.
      */
     String key;
@@ -36,8 +41,9 @@ public class WeatherAPI {
      * @param country
      *   Country ISO code.
      */
-    public void setCityCode(String city, String country) {
+    public void setCityCode(String city, String state, String country) {
         this.city = city;
+        this.stateCode = state;
         this.country = country;
     }
 
@@ -58,8 +64,9 @@ public class WeatherAPI {
      *   Parsed json object.
      */
     public JsonObject getWeatherData() {
+        String stateEntry = (this.stateCode == null || this.stateCode.isEmpty()) ? "" : ","+this.stateCode;
         try {
-            HttpURLConnection conn = (HttpURLConnection) new URL("http://api.openweathermap.org/data/2.5/weather?q=" + city + "," + country + "&appid=" + key + "&units=metric").openConnection();
+            HttpURLConnection conn = (HttpURLConnection) new URL("http://api.openweathermap.org/data/2.5/weather?q=" + city + stateEntry + "," + country + "&appid=" + key + "&units=metric").openConnection();
             conn.setDoOutput(true);
             conn.setRequestMethod("GET");
 

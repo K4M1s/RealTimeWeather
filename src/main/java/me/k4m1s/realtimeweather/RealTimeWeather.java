@@ -55,7 +55,7 @@ public final class RealTimeWeather extends JavaPlugin {
 
         // Pass data to weather api.
         weatherAPI.setAPIKey(config.getString("APIKey"));
-        weatherAPI.setCityCode(config.getString("cityName"), config.getString("countryCode"));
+        weatherAPI.setCityCode(config.getString("cityName"), config.getString("stateCode"), config.getString("countryCode"));
 
         // Start weather download data timer.
         WeatherManager.startTimer();
