@@ -29,6 +29,7 @@ public class WeatherManager {
     public static void startTimer() {
         boolean bRealTimeWeather = RealTimeWeather.getPluginConfig().getBoolean("realTimeWeather", true);
         boolean bRealTime = RealTimeWeather.getPluginConfig().getBoolean("realTime", true);
+        int iRefreshTime = RealTimeWeather.getPluginConfig().getInt("refreshTime", 3);
 
         bkTimer = new BukkitRunnable() {
             public void run() {
@@ -73,7 +74,7 @@ public class WeatherManager {
                     }
                 }
             }
-        }.runTaskTimer(RealTimeWeather.getInstance(), 0L, 60L);
+        }.runTaskTimer(RealTimeWeather.getInstance(), 0L, iRefreshTime * 20L);
     }
 
     /**
