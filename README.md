@@ -20,6 +20,8 @@ Simple minecraft spigot plugin that allows to have real time and weather on your
 ## Release History
 
 * 1.1
+    * Added API refresh config variable
+* 1.1
     * Added stateCode config variable
 * 1.0
     * First build of working plugin
